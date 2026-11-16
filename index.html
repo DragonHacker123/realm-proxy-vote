@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://ntfy.sh; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer"><meta name="robots" content="noindex">
+<title>Proxy vote for dragon</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1d1b;--mute:#62615b;--line:#deddd6;--good:#1f7a4d;--bad:#b3261e;--accent:#2b4c8c;--on:#fff;--note:#fff7e0;--noteline:#e3c56b}
+@media (prefers-color-scheme:dark){:root{--bg:#161614;--card:#21211e;--ink:#ecebe6;--mute:#a9a8a1;--line:#3a3a35;--good:#58c08d;--bad:#ef7d75;--accent:#8fb0ee;--on:#11203d;--note:#2d2812;--noteline:#7a6520}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:560px;margin:0 auto;padding:28px 16px 48px}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 6px}
+h1{font-size:28px;line-height:1.2;margin:0 0 14px;text-wrap:balance}h2{font-size:17px;margin:0 0 6px}
+p{margin:0 0 12px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:0 0 14px}
+.note{background:var(--note);border-color:var(--noteline)}ul{margin:0;padding-left:20px}li{margin:0 0 8px}li:last-child{margin:0}
+button{width:100%;min-height:52px;background:var(--accent);color:var(--on);border:0;border-radius:10px;font:600 17px/1.2 inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}.mute{color:var(--mute);font-size:15px}.good{color:var(--good)}.bad{color:var(--bad)}
+[hidden]{display:none}
+</style></head><body><main>
+<p class="eyebrow">The Realm</p>
+<section id="ask" hidden>
+<h1>dragon is asking to vote for you when you're away</h1>
+<p>If you agree, dragon's tool will cast your vote on bills and in elections that you haven't voted on yourself.</p>
+<div class="card"><h2>What stays yours</h2><ul>
+<li>If you vote first, your vote stands. The tool skips anything you've already voted on and never changes a ballot you cast.</li>
+<li>Every vote cast in your name is logged. Ask dragon to show you the log whenever you like.</li>
+<li>Your password is never shared, and this doesn't reveal it.</li>
+</ul></div>
+<div class="card note"><h2>Read this before you agree</h2>
+<p>The game has only one kind of permission for this, and it's broad: it lets the app do <b>anything you can do</b> in the game, not only vote. dragon's tool is built to send votes and nothing else, but you are trusting dragon with that.</p>
+<p style="margin:0">Votes by every citizen are secret and final, so a vote cast for you can't be changed afterwards.</p></div>
+<div class="card"><h2>Changing your mind</h2><p style="margin:0">In the game, go to <b>You</b>, then <b>Build your own app</b>, then <b>Apps you've let in</b>, and press <b>Revoke</b>. It stops working at once.</p></div>
+<button id="go" type="button">Continue to The Realm</button>
+<p class="mute" style="margin-top:10px">The game will ask you to press Allow. You can close that page if you'd rather not.</p>
+</section>
+<section id="busy" hidden><h1>Finishing up</h1><p>One moment.</p></section>
+<section id="done" hidden><h1 class="good">Done. Thank you.</h1>
+<p>dragon can now cast your vote when you haven't voted yourself. You can close this page.</p>
+<div class="card"><h2>To cancel later</h2><p style="margin:0">In the game: <b>You</b>, <b>Build your own app</b>, <b>Apps you've let in</b>, <b>Revoke</b>.</p></div></section>
+<section id="fail" hidden><h1 class="bad">That didn't work</h1><p id="why"></p>
+<p>Nothing was passed on. If the game shows this app under <b>Apps you've let in</b>, you can revoke it there and try again.</p>
+<button id="again" type="button">Start again</button></section>
+<noscript><h1>This page needs JavaScript</h1><p>Turn it on and reload to continue.</p></noscript>
+</main>
+<script>
+(function(){
+var C={"site":"https://bigdreamerdev.github.io/democracy-sim/","clientId":"app_tQhDmFxGsPHa","inbox":"https://ntfy.sh","topic":"rt-iTmOqyhj9yy6AMmokkM8S-xH9OOvc-sn","publicJwk":{"key_ops":["encrypt"],"ext":true,"alg":"RSA-OAEP-256","kty":"RSA","n":"3BYzCfvQYOgiwt53AJXNTIrmdHYTurMWvhgc0RNyxb6g3J2ZFLPTgmSdd5W1d_8aCL_has9BYksbCm2I2TrS6Rkcd6Oz4MAWo4S-Qre-aGpAgHIqf66a58_t_f4_E7SfWCXCdnMuwxKbkGfs7Qlc7NN7ue5nQJwNtcIIymd1E0i3WLVkqim6B3kR1ANJvY4sw6wWrPEUSo-HY1Z4DA3qm2Nqp1Cprv10uH1AnisSTuMVUFPCEBtSlnVJ6VwutiDlYMl_f13BYnMBzzpF0lE8H0OPOpJWSVZDlTgmlxGwzSBWz4wqwnWJhsCVppsm-13129_pqmA_8Scu2fFnxXzjkQ","e":"AQAB"}};
+var show=function(id){['ask','busy','done','fail'].forEach(function(x){document.getElementById(x).hidden=x!==id})};
+var fail=function(why){document.getElementById('why').textContent=why;show('fail')};
+var h=new URLSearchParams(location.hash.slice(1)),key=h.get('key'),scope=h.get('scope'),state=h.get('state');
+// take the key out of the address bar and the history straight away
+if(location.hash)history.replaceState(null,'',location.pathname+location.search);
+document.getElementById('again').onclick=function(){show('ask')};
+document.getElementById('go').onclick=function(){
+  if(!C.clientId)return fail('This link is not set up yet. Ask for a new one.');
+  var st=Array.from(crypto.getRandomValues(new Uint8Array(16))).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+  try{sessionStorage.setItem('rt-state',st)}catch(x){}
+  location.href=C.site+'#/authorize?app='+encodeURIComponent(C.clientId)+'&scope=act&state='+st;
+};
+if(!key)return show('ask');
+show('busy');
+var want=null;try{want=sessionStorage.getItem('rt-state');sessionStorage.removeItem('rt-state')}catch(x){}
+// a reply that doesn't match the request we made is not ours to pass on
+if(state&&want&&state!==want)return fail('This reply does not match the request this page made.');
+if(scope!=='act')return fail('The game gave read-only access, which cannot vote.');
+if(!/^rlm_[A-Za-z0-9_-]{6,120}$/.test(key))return fail('The game sent back something unexpected.');
+crypto.subtle.importKey('jwk',C.publicJwk,{name:'RSA-OAEP',hash:'SHA-256'},false,['encrypt']).then(function(pub){
+  return crypto.subtle.encrypt({name:'RSA-OAEP'},pub,new TextEncoder().encode(JSON.stringify({key:key,at:Date.now()})));
+}).then(function(ct){
+  var b=new Uint8Array(ct),s='';for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);
+  return fetch(C.inbox+'/'+C.topic,{method:'POST',body:btoa(s),referrerPolicy:'no-referrer'});
+}).then(function(r){if(!r.ok)throw new Error('inbox '+r.status);show('done')})
+.catch(function(){fail('The last step could not be completed. Check your connection and try again.')});
+})();
+</script></body></html>
